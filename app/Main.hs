@@ -18,6 +18,7 @@ import Control.Lens
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import System.Console.Haskeline
+import Control.Monad.Trans.Class (lift)
 
 
 info :: T.Text
@@ -51,7 +52,7 @@ repl env input = do
     Right (ans, newEnv) ->
       let ncl = newEnv ^. line in
         do
-          when (ans /= "") $ outputStrLn ans 
+          when (ans /= "") $ outputStrLn ans
           loop newEnv
     Left err -> do
       outputStrLn (show err)

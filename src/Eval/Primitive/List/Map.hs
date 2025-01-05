@@ -5,7 +5,7 @@ import Data.Number.Number
 import Eval.Primitive.PrimiFunc
 import Data.Environment.EnvironmentType
 
-
+import Control.Monad.Trans.Class (lift)
 import Control.Monad
 import Control.Monad.Except
 

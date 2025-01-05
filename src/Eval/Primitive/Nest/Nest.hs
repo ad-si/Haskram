@@ -9,6 +9,7 @@ import Eval.Primitive.Replace.Replace
 
 import Control.Monad
 import Control.Monad.Except
+import Control.Monad.Trans.Class (lift)
 
 nestl ,nestListl:: Primi
 nestl  = nestUnpack nest

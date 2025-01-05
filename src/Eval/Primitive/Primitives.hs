@@ -96,9 +96,9 @@ primitives = M.fromList
 
   , ("Condition", conditionl)
   , ("Pattern", patternl)
-  , ("GetAttributes", getAttributesl)
-  , ("SetAttributes", setAttributesl)
-  , ("Module", modulel)
+  -- , TODO: ("GetAttributes", getAttributesl)
+  -- , TODO: ("SetAttributes", setAttributesl)
+  -- , TODO: ("Module", modulel)
   , ("Unset", unsetl)
   ]
 

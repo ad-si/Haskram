@@ -12,6 +12,7 @@ import Control.Monad.Trans.Except
 import Control.Monad.Except
 import Control.Monad
 import qualified Data.Map.Strict as M
+import Control.Monad.Trans.Class (lift)
 
 
 

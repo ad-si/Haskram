@@ -9,6 +9,7 @@ import           Eval.Primitive.PrimiFunc
 
 
 import           Control.Lens                     hiding (Context, List)
+import           Control.Monad
 import           Control.Monad.Except
 import           Control.Monad.Trans.Except
 import qualified Data.Map.Strict                  as M

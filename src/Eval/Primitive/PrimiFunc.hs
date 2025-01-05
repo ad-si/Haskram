@@ -1,17 +1,20 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ImportQualifiedPost #-}
+
 module Eval.Primitive.PrimiFunc where
 
-import           Data.DataType
-import           Data.Environment.EnvironmentType
-import           Data.Number.Number
+import Data.DataType
+import Data.Environment.EnvironmentType
+import Data.Number.Number
 
-import           Control.Lens                     hiding (Context, List)
-import           Control.Monad
-import           Control.Monad.Except
-import           Control.Monad.Trans.State
-import qualified Data.Map.Strict                  as M
-import           Data.Maybe
-import qualified Data.Text                        as T
+import Control.Lens hiding (Context, List)
+import Control.Monad
+import Control.Monad.Except
+import Control.Monad.Trans.State
+import Control.Monad.Trans.Class (lift)
+import  Data.Map.Strict qualified as M
+import Data.Maybe
+import Data.Text qualified as T
 
 stateThrow :: LispError -> StateResult a
 stateThrow = lift . throwError

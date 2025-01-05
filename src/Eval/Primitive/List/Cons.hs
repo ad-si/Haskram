@@ -9,6 +9,7 @@ import Data.Environment.EnvironmentType
 
 import Control.Monad
 import Control.Monad.Except
+import Control.Monad.Trans.Class (lift)
 
 rangel :: Primi
 rangel = do

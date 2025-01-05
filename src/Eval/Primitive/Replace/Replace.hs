@@ -12,6 +12,7 @@ import Data.Environment.Update
 import Eval.Patt.PatternPrimi
 
 import Control.Monad.Except
+import Control.Monad.Trans.Class (lift)
 
 replacel, replaceAlll :: Primi
 replacel = do

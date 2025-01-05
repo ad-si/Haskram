@@ -9,6 +9,7 @@ import Control.Monad
 import Control.Monad.Except
 import Data.Maybe
 import qualified Data.Text as T
+import Control.Monad.Trans.Class (lift)
 
 
 equall = comparel equal

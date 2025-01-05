@@ -12,6 +12,7 @@ import Data.IORef
 import Control.Monad
 import Control.Monad.Trans.Except
 import Control.Monad.Except
+import Control.Monad.Trans.Class (lift)
 import qualified Data.Text as T
 
 
