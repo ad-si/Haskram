@@ -1,36 +1,47 @@
 module Data.Number.NumberSpec where
 
-import Data.Number.Number
-import Data.Ratio
-import Test.Hspec
+import Data.Number.Number (
+  Number (Double, Integer, Rational),
+  powerN,
+ )
+import Data.Ratio ((%))
+import Test.Hspec (Spec, context, describe, it)
+
 
 i1 = 3
 i2 = 4
 i3 = -4
 
+
 int1 = Integer i1
 int2 = Integer i2
 int3 = Integer i3
 
-d1 =  3.0
-d2 =  2.0
+
+d1 = 3.0
+d2 = 2.0
 d3 = -4.0
+
 
 dou1 = Double d1
 dou2 = Double d2
 dou3 = Double d3
 
+
 r1 = 1 % 3
 r2 = 3 % 5
 r3 = negate 4 % 7
+
 
 ra1 = Rational r1
 ra2 = Rational r2
 ra3 = Rational r3
 
+
 int = Just . Integer
 dou = Just . Double
 ra = Just . Rational
+
 
 spec :: Spec
 spec = do
@@ -57,4 +68,4 @@ spec = do
       it "double base" $ do
         powerN dou1 int3 == dou (d1 ** fromIntegral i3)
 
-  -- describe ""
+-- describe ""

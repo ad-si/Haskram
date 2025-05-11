@@ -1,3 +1,4 @@
-module Eval.EvalHead(evalLambda) where
+module Eval.EvalHead (evalLambda) where
 
-import Eval.Primitive.Function.Lambda
+import Eval.Primitive.Function.Lambda (evalLambda)
+

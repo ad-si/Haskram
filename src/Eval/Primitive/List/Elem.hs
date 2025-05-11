@@ -1,45 +1,48 @@
-module Eval.Primitive.List.Elem(
+module Eval.Primitive.List.Elem (
   -- * Elementary list manipulation function
-  carl,cdrl,lengthl,consl) where
-import Data.DataType
-import Data.Number.Number
-import Eval.Primitive.PrimiFunc
-import Data.Environment.EnvironmentType
+  carl,
+  cdrl,
+  lengthl,
+  consl,
+) where
 
-import Control.Monad.Except
-import Data.List
+import Control.Monad.Except ()
+import Data.DataType (LispError (Default), LispVal (List, Number))
+import Data.Environment.EnvironmentType (Primi)
+import Data.List (genericLength)
+import Data.Number.Number ()
+import Eval.Primitive.PrimiFunc (getArgumentList, noChange, stateThrow, withnop)
+
 
 lengthl, carl, cdrl, consl :: Primi
 lengthl = do
   withnop 1
   [obj] <- getArgumentList
   return $ case obj of
-            List x -> Number (genericLength x - 1)
-            _ -> Number 0
-
+    List x -> Number (genericLength x - 1)
+    _ -> Number 0
 carl = do
   withnop 1
   [obj] <- getArgumentList
   car obj
-
 cdrl = do
   withnop 1
   [obj] <- getArgumentList
   cdr obj
-
 consl = do
   withnop 2
   [a1, a2] <- getArgumentList
   cons a1 a2
 
+
 car, cdr :: LispVal -> Primi
 car (List []) = stateThrow (Default "car::empty list")
-car (List (x:_)) = return x
+car (List (x : _)) = return x
 car _ = noChange
-
 cdr (List []) = stateThrow (Default "cdr:: empty list")
-cdr (List (_:xs)) = return (List xs)
+cdr (List (_ : xs)) = return (List xs)
 cdr _ = noChange
+
 
 cons :: LispVal -> LispVal -> Primi
 cons val (List xs) = return $ List (val : xs)

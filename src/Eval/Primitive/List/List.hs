@@ -1,7 +1,16 @@
-module Eval.Primitive.List.List
-        (partl,lengthl,carl,cdrl,consl,rangel,mapl,applyl) where
+module Eval.Primitive.List.List (
+  partl,
+  lengthl,
+  carl,
+  cdrl,
+  consl,
+  rangel,
+  mapl,
+  applyl,
+) where
 
-import Eval.Primitive.List.Part
-import Eval.Primitive.List.Elem
-import Eval.Primitive.List.Cons
-import Eval.Primitive.List.Map
+import Eval.Primitive.List.Cons (rangel)
+import Eval.Primitive.List.Elem (carl, cdrl, consl, lengthl)
+import Eval.Primitive.List.Map (applyl, mapl)
+import Eval.Primitive.List.Part (partl)
+

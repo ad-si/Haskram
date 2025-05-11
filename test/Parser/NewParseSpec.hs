@@ -1,32 +1,78 @@
 module Parser.NewParseSpec where
 
-import Parser.NewParse
-import Data.Number.Number
+import Data.Number.Number (Number (Double, Integer))
+import Parser.NewParse (
+  Expr (
+    Add,
+    Alter,
+    Apply,
+    Apply1,
+    Args,
+    Blk,
+    BlkE,
+    BlkSeq,
+    BlkSeqE,
+    Chr,
+    Compound,
+    Cond,
+    Derivative,
+    Dot,
+    Fact,
+    Function,
+    Lis,
+    Map,
+    Mul,
+    Negate,
+    Not,
+    NullSeq,
+    NullSeqE,
+    Num,
+    Out,
+    Part,
+    PartArgs,
+    Pattern,
+    Replace,
+    Rule,
+    Set,
+    Slot,
+    SlotSeq,
+    Str,
+    Var
+  ),
+  parseExpr,
+ )
 
-import Text.Parsec
-import Test.Hspec
-import Test.QuickCheck hiding (Args)
-import Control.Exception(evaluate)
+import Control.Exception (evaluate)
+import Test.Hspec (Spec, context, describe, hspec, it, shouldBe)
+import Test.QuickCheck ()
+import Text.Parsec ()
+
 
 extractValue (Right a) = a
+
 
 testRead = extractValue . parseExpr
 
 
 test a b = testRead a `shouldBe` b
 
+
 testApply a b c = test a $ Apply (Var b) (Args c)
+
 
 integer = Num . Integer
 double = Num . Double
 
+
 preS = "F[a,b,c]"
 pre = Apply (Var "F") (Args [Var "a", Var "b", Var "c"])
 
+
 pe = Var "P"
 
+
 spec :: Spec
-spec  = do
+spec = do
   describe "testRead parse a string to LispVal" $ do
     context "when provided atom" $ do
       it "read an atom expression" $ do
@@ -42,11 +88,11 @@ spec  = do
         testApply "P[]" "P" []
         testApply "P []" "P" []
         testApply "P [a, b]" "P" [Var "a", Var "b"]
-        testApply "P [B [a], 23]" "P" [Apply (Var "B") (Args [Var "a"]) ,integer 23]
+        testApply "P [B [a], 23]" "P" [Apply (Var "B") (Args [Var "a"]), integer 23]
     context "part expression" $ do
       it "part expression" $ do
         test "P[[a]]" (Part pe (PartArgs [Var "a"]))
-        test "P[[P[x],a]]" (Part pe (PartArgs [Apply pe (Args [Var "x"]),Var "a"]))
+        test "P[[P[x],a]]" (Part pe (PartArgs [Apply pe (Args [Var "x"]), Var "a"]))
     context "operator" $ do
       it "@ function apply" $ do
         test "P@c" (Apply pe (Args [Var "c"]))
@@ -61,7 +107,7 @@ spec  = do
         test "P@@P" (Apply1 pe pe)
       it "derivative" $ do
         test "P''[x]" (Apply (Derivative 2 pe) $ Args [Var "x"])
-        -- test "P'"
+      -- test "P'"
       it "dot" $ do
         test "P . P" (Dot pe pe)
 
@@ -71,7 +117,7 @@ spec  = do
 
       it "replace /." $ do
         test "P/.P->P" (Replace pe (Rule pe pe))
-        test "P/.{P->P, P->P}" (Replace pe (Lis [Rule pe pe,Rule pe pe]))
+        test "P/.{P->P, P->P}" (Replace pe (Lis [Rule pe pe, Rule pe pe]))
 
       it "& function" $ do
         test "P&" (Function pe)
@@ -117,7 +163,7 @@ spec  = do
     context "compound expression" $ do
       it "compound" $ do
         test "P;#" (Compound pe (Slot 1))
-        -- test "P;1;2" (Compound [pe,integer 1,integer 2, None])
+    -- test "P;1;2" (Compound [pe,integer 1,integer 2, None])
 
     context "conditional expression" $ do
       it "condtion" $ do
@@ -128,5 +174,6 @@ spec  = do
       it ": pattern" $ do
         test "P:_" (Pattern pe Blk)
         test "P:(1|2)" (Pattern pe (Alter (integer 1) (integer 2)))
+
 
 main = hspec spec

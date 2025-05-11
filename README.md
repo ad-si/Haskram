@@ -1,36 +1,43 @@
-# A simple term rewriting system with [Wolfram Language](https://www.wolfram.com/language/)'s syntax
+# Haskram
 
-Inspired by the book [Write Yourself a Scheme in 48 Hours](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours).
-I decide to write myself a simple interpreter of Wolfram Language to learn more about Haskell as well as
-achieve a deeper understanding about `Mathematica`, which is the desktop IDE for `Wolfram Language`.
+A simple term rewriting system
+with [Wolfram Language](https://www.wolfram.com/language/)'s syntax.
 
-## ScreenShot
-
-![mmaclone](https://raw.githubusercontent.com/jyh1/mmaclone/master/demo.png)
+![haskram](./demo.png)
 
 
-## Running (Using [Stack](https://github.com/commercialhaskell/stack))
+## Usage
+
+```sh
+git clone https://github.com/ad-si/Haskram
+cd Haskram
+make install
 ```
-  git clone https://github.com/jyh1/mmaclone.git
-  cd mmaclone/mmaclone
-  stack setup
-  stack build
-  stack exec mmaclone-exe
-```
-Prebulid binary files are available on the [release page](https://github.com/jyh1/mmaclone/releases)
+
+Prebulid binary files are available on the
+[release page](https://github.com/ad-si/Haskram/releases).
+
 
 ## Features
-This interpreter is intended to mimic every exact detail of `Wolfram Language`, including but not limited to its syntax, semantic,
-expression structure, evaluation details, etc. (All the scripts below were executed in the REPL session of the `mmaclone` program)
 
-1. The program support nearly all `Wolfram Language`'s syntax sugar, infix operators as well as their precedence. E.g., inequality expression chain is parsed to the same AST with `Wolfram Language`.
+This interpreter is intended to mimic every exact detail of `Wolfram Language`,
+including but not limited to its syntax, semantic,
+expression structure, evaluation details, etc.
+(All the scripts below were executed in the REPL session of the `haskram` program)
 
-  ```
+1. The program support nearly all `Wolfram Language`'s syntax sugar,
+  infix operators as well as their precedence.
+  E.g., inequality expression chain
+  is parsed to the same AST with `Wolfram Language`.
+
+  ```wolfram
   In[1]:= FullForm[a==b>=c<=d<e]
   Out[1]= Inequality[a,Equal,b,GreaterEqual,c,LessEqual,d]
   ```
-  Some more complicated examples.
-  ```
+
+  Some more complicated examples:
+
+  ```wolfram
   In[2]:= FullForm[P@1@2//3]
   Out[2]= 3[P[1[2]]]
   In[3]:= FullForm[P''''[x]]
@@ -38,9 +45,10 @@ expression structure, evaluation details, etc. (All the scripts below were execu
   In[4]:= FullForm[Hold[(1 ##&)[2]]]
   Out[4]= Hold[Function[Times[1,SlotSequence[1]]][2]]
   ```
-2. `Wolfram Language`'s powerful pattern matching is also implemented with scrupulous.
 
-  ```
+2. `Wolfram Language`'s powerful pattern matching is also implemented.
+
+  ```wolfram
   (*The famous bubble sort implementation*)
   In[1]:= sortRule := {x___,y_,z_,k___}/;y>z -> {x,z,y,k}
   In[2]:= {64, 44, 71, 48, 96, 47, 59, 71, 73, 51, 67, 50, 26, 49, 49}//.sortRule
@@ -50,8 +58,12 @@ expression structure, evaluation details, etc. (All the scripts below were execu
   In[4]:= Log[a (b c^d)^e] //. rules
   Out[4]= Log[a]+e (Log[b]+d Log[c])
   ```
-  Currently, the derivative function `D` is not built-in supported, but you could easily implement one with the powerful pattern matching facilities.
-  ```
+
+  Currently, the derivative function `D` is not built-in supported,
+  but you could easily implement one
+  with the powerful pattern matching facilities.
+
+  ```wolfram
   In[5]:= D[a_,x_]:=0
   In[6]:= D[x_,x_]:=1
   In[7]:= D[a_+b__,x_]:=D[a,x]+D[Plus[b],x]
@@ -66,8 +78,10 @@ expression structure, evaluation details, etc. (All the scripts below were execu
   In[14]:= D[%,x]
   Out[14]= -Cos[x] x^(-2)-(-2 x^(-3) Sin[x]+Cos[x] x^(-2))-x^(-1) Sin[x]
   ```
-    Pattern test facility is of the same semantic with `Wolfram Language`'s.
-  ```
+
+  Pattern test facility is of the same semantic with `Wolfram Language`'s.
+
+  ```wolfram
   In[15]:= {{1,1},{0,0},{0,2}}/.{x_,x_}/;x+x==2 -> a
   Out[15]= {a,{0,0},{0,2}}
   In[16]:= {a, b, c, d, a, b, b, b} /. a | b -> x
@@ -79,9 +93,10 @@ expression structure, evaluation details, etc. (All the scripts below were execu
   In[20]:= q[5,5]
   Out[20]= 252
   ```
+
 3. Some more interesting scripts
 
-  ```
+  ```wolfram
   In[1]:= ((#+##&) @@#&) /@{{1,2},{2,2,2},{3,4}}
   Out[1]= {4,8,10}
   In[2]:= fib[n_]:=fib[n]=fib[n-1]+fib[n-2];fib[1]=fib[2]=1;Null
@@ -95,29 +110,33 @@ expression structure, evaluation details, etc. (All the scripts below were execu
   Out[5]= {Null,Null}
   ```
 
-## More
-
-For more information please refer to the project [wiki](https://github.com/jyh1/mmaclone/wiki) (still under construction).
-
+For more information please refer to the project
+[wiki](https://github.com/ad-si/Haskram/wiki).
 
 
-## Features that are likely to be added in future versions:
-(Some serious design errors are exposed during development, which I consider are inhibiting
-  the project from scaling up. So currently my primary focus would be on refactor
-  rather than adding new features/functions)
+## TODOs
 
-1. More mathematical functions (`Sin`, `Cos`, `Mod` etc...)
-2. Arbitrary precision floating arithmetic using GMP(GNU Multiple Precision Arithmetic Library), currently arbitrary integer, double and rational number are supported.
-2. More built-in functions (`Level`, `Import`, `Derivative`etc...)
-3. More sophisticated pattern matching
-  * ~~head specification (of the form Blank[*Head*], currently it only support list type)~~(Implemented)
-  * ~~Pattern Test~~(Implemented)
-  * ~~BlankSequence, BlankNullSequence~~(Implemented)
-  * Other pattern matching expression, like `Verbatim`, `Longest`
-4. ~~RecursionLimit~~(Implemented)
-5. Negative index e.g. in `Part`
-6. Negative level specification
-7. Curried function e.g. `f[a][b]` (currently it will throw an error if one is trying to attach value to
-  the curried form through `Set` or `SetDelayed`)
-8. Use iPython as front end
-9. ~~Replace String implementation with more efficient Text~~(Implemented)
+Some serious design errors are exposed during development,
+which I consider are inhibiting the project from scaling up.
+So currently the primary focus will be on refactoring
+rather than adding new features/functions.
+
+- [ ] More mathematical functions (`Sin`, `Cos`, `Mod` etc...)
+- [ ] Arbitrary precision floating arithmetic using GMP
+    (GNU Multiple Precision Arithmetic Library),
+    currently arbitrary integer, double and rational number are supported.
+- [ ] More built-in functions (`Level`, `Import`, `Derivative`etc...)
+- [x] More sophisticated pattern matching
+  - [x] head specification (of the form Blank[*Head*]),
+      currently it only support list type
+  - [x] Pattern Test
+  - [x] BlankSequence, BlankNullSequence
+  - [ ] Other pattern matching expression, like `Verbatim`, `Longest`
+- [x] RecursionLimit
+- [ ] Negative index e.g. in `Part`
+- [ ] Negative level specification
+- [ ] Curried function e.g. `f[a][b]`
+    (currently it will throw an error if one is trying to attach value
+    to the curried form through `Set` or `SetDelayed`)
+- [ ] Use iPython as front end
+- [x] Replace String implementation with more efficient Text

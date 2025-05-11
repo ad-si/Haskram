@@ -1,58 +1,64 @@
 {-# LANGUAGE TemplateHaskell #-}
+
 module Data.Environment.EnvironmentType where
 
-import           Data.Attribute
-import           Data.DataType
-
-import           Control.Lens              hiding (Context, List)
-import           Control.Monad.Trans.State
-import qualified Data.Map.Strict           as M
-import qualified Data.Text                 as T
-
+import Control.Lens (makeLenses)
+import Control.Monad.Trans.State (StateT)
+import Data.Attribute (Attributes)
+import Data.DataType (IOThrowsError, LispVal, ThrowsError)
+import qualified Data.Map.Strict as M
+import qualified Data.Text as T
 
 
 type ValueRule = M.Map LispVal LispVal
 type PatternRule = [(LispVal, LispVal)]
 type OwnValue = M.Map T.Text LispVal
 type DownValue = M.Map T.Text Down
-data Down = Down {_value :: ValueRule,_pattern :: PatternRule}
+data Down = Down {_value :: ValueRule, _pattern :: PatternRule}
 data Context = Context {_own :: OwnValue, _down :: DownValue}
+
 
 makeLenses ''Down
 makeLenses ''Context
 
 
-
 -- * Types and common functions for defining primitive functions.
+
 
 type Result = ThrowsError (Maybe LispVal)
 type IOResult = IOThrowsError (Maybe LispVal)
 
+
 type EvalResult = IOThrowsError LispVal
 
+
 type StateResult a = StateT PrimiEnv IOThrowsError a
+
 
 -- | Basic primitive function which only perform simple term rewriting
 type Primi = StateResult LispVal
 
+
 type Eval = LispVal -> Primi
+
 
 type Primitives = M.Map T.Text Primi
 
-type EvalArguments = [LispVal] -> Primi
 
+type EvalArguments = [LispVal] -> Primi
 
 
 -- | Envrionment for primitive function
 data PrimiEnv = PrimiEnv
   { _eval :: Eval
-  , _con  :: Context
+  , _con :: Context
   , _args :: [LispVal]
-  -- , _modified :: Bool
-  , _attr :: Attributes
-  , _dep  :: Int
+  , -- , _modified :: Bool
+    _attr :: Attributes
+  , _dep :: Int
   , _line :: Int
   }
+
 
 makeLenses ''PrimiEnv
 
@@ -66,6 +72,7 @@ initialMatch = M.empty
 
 type Rule = (Pattern, LispVal)
 type Rules = [Rule]
+
 
 type MaybeMatch = Maybe MatchRes
 type MatchResult = StateResult MaybeMatch

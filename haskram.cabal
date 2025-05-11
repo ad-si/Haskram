@@ -1,8 +1,8 @@
-name:          mmaclone
+name:          haskram
 version:       0.1.0.0
 synopsis:      Initial project template from stack
 description:   Please see README.md
-homepage:      http://github.com/githubuser/mmaclone#readme
+homepage:      http://github.com/ad-si/Haskram
 license:       BSD3
 license-file:  LICENSE
 author:        Yonghao Jin
@@ -69,7 +69,7 @@ library
   default-language: Haskell2010
   extensions:       OverloadedStrings
 
-executable mmaclone-exe
+executable haskram
   hs-source-dirs:   app
   main-is:          Main.hs
   ghc-options:      -threaded -rtsopts -with-rtsopts=-N1
@@ -77,21 +77,21 @@ executable mmaclone-exe
       base
     , haskeline
     , lens
-    , mmaclone
+    , haskram
     , mtl
     , text
     , transformers
 
   default-language: Haskell2010
 
-test-suite mmaclone-test
+test-suite haskram-test
   type:             exitcode-stdio-1.0
   hs-source-dirs:   test
   main-is:          Spec.hs
   build-depends:
       base
     , hspec
-    , mmaclone
+    , haskram
     , mtl
     , parsec
     , QuickCheck
@@ -109,4 +109,4 @@ test-suite mmaclone-test
 
 source-repository head
   type:     git
-  location: https://github.com/jyh1/mmaclone
+  location: https://github.com/ad-si/Haskram
